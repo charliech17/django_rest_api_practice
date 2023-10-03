@@ -54,14 +54,21 @@ def get_all_course(request):
 @api_view(['GET','Post'])
 def add_std_course(request):
     if request.method == 'GET':
-        return Response("ok")
+        # 依照姓名及年齡去排序
+        stdCourseStatus = StdCourseStatus.objects \
+                            .select_related("students","courses") \
+                            .order_by("students__name","students__age") \
+                            .all()
+        serializer = StdCourseStatusSerializer(stdCourseStatus,many=True)
+        return Response(serializer.data)
     elif request.method == 'POST':
+        std_name = request.data.pop("std_name")
+        std_course = request.data.pop("std_course")
+        courses_id = CoursesInfo.objects.get(course_name__exact=std_course).id
+        students_id = Student.objects.get(name__exact=std_name).id
         serializer = PostStdStatusSerializer(
-            data=request.data,
-            context={
-                "std_name": request.data["std_name"],
-                "std_course": request.data["std_course"]
-            }
+            data={"courses": courses_id,"students": students_id, **request.data},
+            context={"std_name":std_name,"std_course": std_course}
         )
         if serializer.is_valid():
             serializer.save()
