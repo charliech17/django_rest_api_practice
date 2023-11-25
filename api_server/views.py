@@ -1,10 +1,11 @@
 from django.shortcuts import get_object_or_404
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view,authentication_classes,permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 
 from .models import *
 from .serializers import *
+from .permissions import CustomPermission
 
 
 # Create your views here.
@@ -74,3 +75,19 @@ def add_std_course(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET','POST'])
+def get_set_std_grade(request):
+    if request.method == 'GET':
+        return Response('尚未實作')
+    elif request.method == 'POST':
+        if not request.auth:
+            return Response('沒有權限')
+        else:
+            content = {'auth': str(request.auth),'user':str(request.user)}
+            return Response(content)
+
+@api_view(['GET'])
+@permission_classes([CustomPermission])
+def see_after_login(request):
+    return Response("確認登入才看的到我")

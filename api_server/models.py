@@ -23,6 +23,7 @@ course_status_choice = (
 class CoursesInfo(models.Model):
     course_name = models.CharField(max_length=20)
     difficulty = models.CharField(max_length=20,choices=defficulty_choice)
+    final_grade = models.DecimalField(max_digits=3,decimal_places=2,null=True)
 
 class Student(models.Model):
     name = models.CharField(max_length=10)
