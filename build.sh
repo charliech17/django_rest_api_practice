@@ -2,7 +2,7 @@
 # exit on error
 set -o errexit
 
-pipenv install
+poetry install
 
 python manage.py collectstatic --no-input
 python manage.py migrate

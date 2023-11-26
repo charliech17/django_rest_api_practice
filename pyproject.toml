@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "image-text-recoginize"
+version = "0.1.0"
+description = ""
+authors = ["kuo <charliech17@yahoo.com.tw>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+djangorestframework = "^3.14.0"
+djoser = "^2.2.2"
+djangorestframework-simplejwt = "^5.3.0"
+mysqlclient = "^2.2.0"
+python-dotenv = "^1.0.0"
+django-debug-toolbar = "^4.2.0"
+django-cors-headers = "^4.3.1"
+dj-database-url = "^2.1.0"
+psycopg2-binary = "^2.9.9"
+gunicorn = "^21.2.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
