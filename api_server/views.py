@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view,authentication_classes,permission_classes
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 
 from .models import *
@@ -88,6 +89,6 @@ def get_set_std_grade(request):
             return Response(content)
 
 @api_view(['GET'])
-@permission_classes([CustomPermission])
+@permission_classes([IsAuthenticated]) # 如果要客製化訊息，再使用CustomPermission
 def see_after_login(request):
     return Response("確認登入才看的到我")
