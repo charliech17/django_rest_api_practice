@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 from dotenv import load_dotenv
 import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,12 +25,13 @@ load_dotenv()
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-hr$d4@tnz+l)&tstnma*d4jt@5r-1=z3k970)%rsfg2ngp)g9k'
+SECRET_KEY = os.getenv('PASSWORD')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('IS_LOCAL') == "YES"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(" ")
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS').split(" ")
 
 
 # Application definition
@@ -42,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'djoser',
     'debug_toolbar',
     'api_server',
@@ -50,6 +53,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -84,7 +89,7 @@ WSGI_APPLICATION = 'image_text_recoginize.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
+local_db = { # your db local settings
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'image_to_text',
@@ -93,6 +98,13 @@ DATABASES = {
         'PASSWORD': os.getenv('PASSWORD')
     }
 }
+prod_db = {
+    'default': dj_database_url.config(
+        default=os.getenv('PROD_DB_URI'),
+        conn_max_age=600
+    )
+}
+DATABASES = prod_db if not DEBUG else local_db
 
 AUTH_USER_MODEL = 'core.user'
 
