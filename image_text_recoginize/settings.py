@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+from doctest import debug
 from pathlib import Path
 from dotenv import load_dotenv
 import os
@@ -127,13 +128,23 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# RENDERER_CLASSES
+DEFAULT_RENDERER_CLASSES = (
+    'rest_framework.renderers.JSONRenderer',
+)
+
+if DEBUG:
+    DEFAULT_RENDERER_CLASSES = DEFAULT_RENDERER_CLASSES + (
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    )
 
 # REST_FRAMEWORK
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    'EXCEPTION_HANDLER': 'api_server.exceptions.custom_exception_handler'
+    'EXCEPTION_HANDLER': 'api_server.exceptions.custom_exception_handler',
+    'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES
 }
 
 # SIMPLE_JWT
