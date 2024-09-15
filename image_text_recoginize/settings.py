@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'api_server',
     'image_text_recoginize',
+    'accounting_tools',
     'core',
 ]
 
