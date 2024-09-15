@@ -9,8 +9,9 @@ from accounting_tools.models import Event, Webhook
 def webhook_handler(request):
     if request.method == 'POST':
         # 解析 JSON 數據
-        data = json.loads(request.body)
-        
+        data = json.loads(request.body.decode('utf-8'))
+        print(data['content'])
+
         # 創建 Webhook 對象，存儲 destination
         webhook = Webhook.objects.create(destination=data['destination'])
         
@@ -40,7 +41,6 @@ def webhook_handler(request):
         # 保存 Webhook 和關聯的事件
         webhook.save()
         
-        print('webhook', webhook)
         # 返回成功響應
         return JsonResponse({"status": "success"}, status=200)
     
