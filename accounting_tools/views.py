@@ -10,7 +10,7 @@ def webhook_handler(request):
     if request.method == 'POST':
         # 解析 JSON 數據
         data = json.loads(request.body.decode('utf-8'))
-        print(data['content'])
+        print(data)
 
         # 創建 Webhook 對象，存儲 destination
         webhook = Webhook.objects.create(destination=data['destination'])
